@@ -1,0 +1,15 @@
+// =============================================================================
+// KSHIELD SENTINEL // SCSS ABSTRACTS BARREL (PATRÓN 7-1 SIMPLIFICADO)
+// Autor: Luis Lázaro Pimentel (2º DAM - IES Nebrija)
+// =============================================================================
+// Mediante la directiva moderna @forward de Dart-Sass, este archivo actúa como
+// punto de entrada unificado ('barrel') para todos los tokens de diseño (variables)
+// y herramientas de preprocesamiento (mixins).
+//
+// Ventajas frente a la directiva deprecada @import:
+// 1. Evita la polución del espacio de nombres global.
+// 2. Previene la compilación redundante de CSS cuando múltiples componentes lo usan.
+// 3. Facilita la configuración y encapsulamiento con 'show', 'hide' y 'as'.
+
+@forward 'variables';
+@forward 'mixins';

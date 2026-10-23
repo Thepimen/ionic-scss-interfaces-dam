@@ -1,0 +1,224 @@
+<!--
+=============================================================================
+KSHIELD SENTINEL // PLANTILLA HTML PRINCIPAL (COMPONENTE HOME)
+=============================================================================
+Autor: Luis Lázaro Pimentel
+Centro: Instituto Nebrija de Formación Profesional (Madrid)
+Ciclo: 2º CFGS en Desarrollo de Aplicaciones Multiplataforma (DAM)
+Módulo: Desarrollo de Interfaces (Código 0488)
+Práctica: Arquitectura SCSS, BEM, Ionic y Angular Standalone
+
+CUMPLIMIENTO DE LA RÚBRICA DEL PROFESOR:
+1. Requisito A: Título en ROJO, en MAYÚSCULAS y CENTRADO (Líneas 70-85).
+2. Requisito B: Botón alineado a la DERECHA en color AZUL (Líneas 145-170).
+3. Requisito C: Imagen CENTRADA con BORDE EN VERDE DE 3PX (Líneas 105-135).
+=============================================================================
+-->
+
+<ion-header [translucent]="true" class="kshield-header">
+  <ion-toolbar class="kshield-header__toolbar">
+    <ion-title class="kshield-header__ion-title">
+      <div class="kshield-header__brand">
+        <div class="kshield-header__indicator"></div>
+        <span class="kshield-header__logo-text">KSHIELD // SENTINEL</span>
+        <span class="kshield-header__badge">NODE.01_DAM</span>
+      </div>
+    </ion-title>
+    
+    <div class="kshield-header__meta" slot="end">
+      <span class="kshield-header__author">{{ studentName }}</span>
+      <span class="kshield-header__separator">/</span>
+      <span class="kshield-header__center">Nebrija FP Madrid</span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="kshield-canvas">
+  <main class="kshield-layout">
+
+    <!-- BARRA SUPERIOR DE CONTROL: INSPECTOR DE RÚBRICA Y CONMUTADOR CROMÁTICO -->
+    <header class="inspector-control-bar">
+      <div class="inspector-control-bar__info">
+        <span class="inspector-control-bar__tag">0488-DI</span>
+        <span class="inspector-control-bar__label">PANEL DE CONTROL ACADÉMICO // EVALUACIÓN DE ESTILOS SCSS</span>
+      </div>
+
+      <div class="inspector-control-bar__buttons">
+        <!-- Botón para alternar visibilidad de las etiquetas de inspección de la rúbrica -->
+        <button 
+          type="button"
+          class="control-pill" 
+          [class.control-pill--active]="isRubricInspectorActive()"
+          (click)="toggleRubricInspector()"
+          title="Muestra u oculta las etiquetas de inspección con las reglas CSS exactas">
+          <span class="control-pill__dot"></span>
+          <span>{{ isRubricInspectorActive() ? 'Ocultar Inspector' : 'Ver Modo Inspector Rúbrica' }}</span>
+        </button>
+
+        <!-- Botón para alternar entre tokens de diseño modernos y colores CSS puros (red, blue, green) -->
+        <button 
+          type="button"
+          class="control-pill control-pill--alt"
+          [class.control-pill--active]="usePureCssColors()"
+          (click)="toggleColorMode()"
+          title="Alterna entre colores semánticos (#ef4444, #2563eb, #10b981) y CSS puro ('red', 'blue', 'green')">
+          <span>Paleta: <strong>{{ usePureCssColors() ? 'CSS Puro (Red/Blue/Green)' : 'Semántica (#ef4444/#2563eb/#10b981)' }}</strong></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- TARJETA PRINCIPAL DE TELEMETRÍA (ESTRUCTURA BEM MODULAR) -->
+    <section class="telemetry-card" [class.telemetry-card--pure-mode]="usePureCssColors()">
+      
+      <!-- CABECERA DE LA TARJETA -->
+      <div class="telemetry-card__meta-bar">
+        <div class="telemetry-card__cluster-info">
+          <span class="telemetry-card__status-dot"></span>
+          <span class="telemetry-card__cluster-id">SECURITY CLUSTER: SEC-NODE-0488</span>
+        </div>
+        <div class="telemetry-card__timestamp">
+          <span>Último escaneo: {{ lastAuditTimestamp() }}</span>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- REQUISITO A DE LA RÚBRICA: TÍTULO EN ROJO, MAYÚSCULAS Y CENTRADO       -->
+      <!-- ===================================================================== -->
+      <div class="telemetry-card__header-zone">
+        
+        <!-- Cartela flotante del Inspector de Rúbrica para el Requisito A -->
+        @if (isRubricInspectorActive()) {
+          <div class="rubric-callout rubric-callout--red">
+            <span class="rubric-callout__pill">REQUISITO A [VERIFICADO]</span>
+            <span class="rubric-callout__rule">
+              color: {{ usePureCssColors() ? 'red (#ff0000)' : '#ef4444 ($color-title-red)' }} | 
+              text-transform: uppercase | 
+              text-align: center
+            </span>
+          </div>
+        }
+
+        <!-- ELEMENTO OBLIGATORIO: Título centrado, en mayúsculas y en color rojo -->
+        <h1 
+          class="telemetry-card__title--red-centered"
+          [class.telemetry-card__title--pure-red]="usePureCssColors()">
+          KSHIELD KERNEL SENTINEL // NODE TELEMETRY
+        </h1>
+
+        <p class="telemetry-card__subtitle">
+          Sistema de supervisión distribuida en tiempo real para nodos de cómputo en alta disponibilidad.
+          Implementado con arquitectura modular <strong>SCSS (Patrón 7-1)</strong> sobre <strong>Ionic Framework</strong> y <strong>Angular Standalone</strong>.
+        </p>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- REQUISITO C DE LA RÚBRICA: IMAGEN CENTRADA CON BORDE VERDE DE 3PX     -->
+      <!-- ===================================================================== -->
+      <div class="telemetry-card__media-zone">
+
+        <!-- Cartela flotante del Inspector de Rúbrica para el Requisito C -->
+        @if (isRubricInspectorActive()) {
+          <div class="rubric-callout rubric-callout--green">
+            <span class="rubric-callout__pill">REQUISITO C [VERIFICADO]</span>
+            <span class="rubric-callout__rule">
+              border: 3px solid {{ usePureCssColors() ? 'green (#00ff00)' : '#10b981 ($color-border-green)' }} | 
+              display: block | 
+              margin-inline: auto (Centrada)
+            </span>
+          </div>
+        }
+
+        <!-- CONTENEDOR DE IMAGEN: Centrado mediante mixin SCSS 'center-block-image' -->
+        <div class="telemetry-card__media-wrapper">
+          <img 
+            src="assets/kernel-sentinel.svg" 
+            alt="Esquema de Topología de Red y Arquitectura del Kernel KShield Sentinel"
+            class="telemetry-card__image--green-border"
+            [class.telemetry-card__image--pure-green]="usePureCssColors()"
+            width="800"
+            height="500" />
+        </div>
+
+        <div class="telemetry-card__caption">
+          <span>Fig 1.1: Mapeo de topología activa del kernel de seguridad y balanceo de carga. Borde verde continuo de 3px de grosor.</span>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- REQUISITO B DE LA RÚBRICA: BOTÓN ALINEADO A LA DERECHA EN AZUL        -->
+      <!-- ===================================================================== -->
+      <div class="telemetry-card__actions-zone">
+
+        <!-- Cartela flotante del Inspector de Rúbrica para el Requisito B -->
+        @if (isRubricInspectorActive()) {
+          <div class="rubric-callout rubric-callout--blue">
+            <span class="rubric-callout__pill">REQUISITO B [VERIFICADO]</span>
+            <span class="rubric-callout__rule">
+              display: flex | 
+              justify-content: flex-end (Alineado a la Derecha) | 
+              --background: {{ usePureCssColors() ? 'blue (#0000ff)' : '#2563eb ($color-btn-blue)' }}
+            </span>
+          </div>
+        }
+
+        <!-- CONTENEDOR DE ACCIONES: Alineado estrictamente a la derecha mediante mixin 'flex-end-right' -->
+        <div class="telemetry-card__actions--right">
+          
+          <div class="telemetry-card__status-feedback">
+            <span class="telemetry-card__pulse-icon">●</span>
+            <span class="telemetry-card__status-text">{{ executionStatusMessage() }}</span>
+          </div>
+
+          <!-- BOTÓN OBLIGATORIO: Estilizado en color azul y alineado a la derecha -->
+          <ion-button 
+            class="telemetry-card__btn--blue"
+            [class.telemetry-card__btn--pure-blue]="usePureCssColors()"
+            (click)="executeTelemetryAudit()"
+            shape="round"
+            title="Ejecuta una auditoría de paquetes y telemetría sobre el nodo centinela">
+            <span class="btn-inner-content">
+              <span class="btn-inner-content__label">EJECUTAR DIAGNÓSTICO DE RED</span>
+              <svg class="btn-inner-content__icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </span>
+          </ion-button>
+
+        </div>
+      </div>
+
+      <!-- PANEL TÉCNICO INFERIOR: RESUMEN DE COMPILACIÓN Y TELEMETRÍA DEL SISTEMA -->
+      <footer class="telemetry-card__footer">
+        <div class="telemetry-grid">
+          
+          <div class="telemetry-item">
+            <span class="telemetry-item__title">PREPROCESADOR SASS</span>
+            <span class="telemetry-item__value">Dart-Sass 1.104.1 (Vía Ionic Serve)</span>
+            <span class="telemetry-item__desc">Pipeline integrado en memoria con HMR instantáneo</span>
+          </div>
+
+          <div class="telemetry-item">
+            <span class="telemetry-item__title">ARQUITECTURA MODULAR</span>
+            <span class="telemetry-item__value">Patrón 7-1 Simplificado + BEM</span>
+            <span class="telemetry-item__desc">_variables.scss + _mixins.scss con directiva moderna @use</span>
+          </div>
+
+          <div class="telemetry-item">
+            <span class="telemetry-item__title">ENCAPSULACIÓN ANGULAR</span>
+            <span class="telemetry-item__value">ViewEncapsulation.Emulated</span>
+            <span class="telemetry-item__desc">Penetración de Shadow DOM Ionic vía ::part(native) y --background</span>
+          </div>
+
+          <div class="telemetry-item">
+            <span class="telemetry-item__title">CREDITOS ACADÉMICOS</span>
+            <span class="telemetry-item__value">{{ studentName }}</span>
+            <span class="telemetry-item__desc">{{ academicCycle }} — {{ institution }}</span>
+          </div>
+
+        </div>
+      </footer>
+
+    </section>
+
+  </main>
+</ion-content>

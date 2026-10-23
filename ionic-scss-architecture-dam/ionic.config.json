@@ -1,0 +1,7 @@
+{
+  "name": "ionic-scss-architecture-dam",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

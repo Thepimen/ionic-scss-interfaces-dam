@@ -1,0 +1,34 @@
+# =============================================================================
+# KSHIELD SENTINEL // GITIGNORE
+# Autor: Luis Lázaro Pimentel (2º DAM - IES Nebrija)
+# =============================================================================
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Angular / Ionic build cache
+.angular/
+**/.angular/
+
+# Editor directories
+.vscode/
+**/.vscode/
+.idea/
+
+# Local design research skills (temporal, según enunciado)
+.design-skills/
+
+# Build outputs (excluidos del repo principal, gestionados en rama gh-pages)
+www/
+**/www/
+dist/
+**/dist/
+
+# OS & Environment
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.log
+.env
+.env.local

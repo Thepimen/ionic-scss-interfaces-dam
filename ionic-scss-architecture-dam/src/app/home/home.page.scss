@@ -1,0 +1,619 @@
+// =============================================================================
+// KSHIELD SENTINEL // HOJA DE ESTILOS SCSS MODULAR (COMPONENTE HOME)
+// =============================================================================
+// Autor: Luis Lázaro Pimentel
+// Centro: Instituto Nebrija de Formación Profesional (Madrid)
+// Ciclo: 2º CFGS en Desarrollo de Aplicaciones Multiplataforma (DAM)
+// Módulo: Desarrollo de Interfaces (Código 0488)
+// Práctica: Arquitectura SCSS, BEM, Ionic y Angular Standalone
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// FUNDAMENTO TÉCNICO SCSS: ¿POR QUÉ @use Y NO EL OBSOLETO @import?
+// -----------------------------------------------------------------------------
+// En versiones modernas de Dart-Sass (1.23+ y 1.77+), la directiva tradicional
+// '@import' ha sido formalmente deprecada debido a cuatro problemas estructurales:
+// 1. Polución Global: @import cargaba todas las variables, funciones y mixins
+//    en el espacio de nombres global, provocando colisiones accidentales entre
+//    módulos sin advertencia previa.
+// 2. Compilación Redundante: Si diez archivos .scss hacían @import de un mismo
+//    archivo base, el compilador procesaba y duplicaba las reglas diez veces.
+// 3. Ausencia de Encapsulamiento: No existía distinción entre miembros públicos
+//    y privados. Con @use, cualquier identificador que empiece por guion bajo
+//    (ej. $_variable-privada) queda aislado y no se exporta.
+// 4. Inmutabilidad y Modularidad: @use ejecuta el archivo exactamente una vez
+//    en memoria y asocia un alias o permite '@use ... as *' de forma controlada.
+
+@use '../../styles/abstracts' as *;
+
+// -----------------------------------------------------------------------------
+// ENCAPSULACIÓN ANGULAR & SHADOW DOM DE IONIC
+// -----------------------------------------------------------------------------
+// Angular compila este archivo bajo 'ViewEncapsulation.Emulated'. Esto significa
+// que cada selector aquí definido recibirá un atributo generado en tiempo de
+// compilación (ej. `.telemetry-card[_ngcontent-ng-c1234]`).
+// Sin embargo, los Web Components nativos de Ionic (`<ion-button>`, `<ion-toolbar>`)
+// poseen su propio 'Shadow Root'. Para estilizar sus elementos internos (como el
+// botón nativo `<button class="button-native">` dentro de `<ion-button>`), no
+// podemos usar selectores descendientes planos; debemos inyectar Variables CSS
+// documentadas (`--background`, `--color`) o usar la pseudoclase de penetración
+// estandarizada `::part(native)`.
+
+// -----------------------------------------------------------------------------
+// 1. HEADER Y BARRA DE NAVEGACIÓN SUPERIOR
+// -----------------------------------------------------------------------------
+.kshield-header {
+  border-bottom: 1px solid $border-subtle;
+
+  &__toolbar {
+    --background: #{$bg-canvas};
+    --color: #{$text-primary};
+    --border-width: 0;
+    --padding-start: #{$spacing-md};
+    --padding-end: #{$spacing-md};
+    --min-height: 58px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    float: left;
+  }
+
+  &__indicator {
+    width: 9px;
+    height: 9px;
+    border-radius: $radius-full;
+    background-color: $color-border-green;
+    box-shadow: 0 0 8px $color-border-green;
+    animation: telemetry-pulse 2s infinite ease-in-out;
+  }
+
+  &__logo-text {
+    font-family: $font-mono;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.08em;
+    color: $text-primary;
+  }
+
+  &__badge {
+    @include rubric-badge($text-cyan, 0.15);
+    font-size: 0.65rem;
+    padding: 1px 6px;
+  }
+
+  &__meta {
+    float: right;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $text-secondary;
+
+    @include respond-to('sm') {
+      font-size: $font-size-sm;
+    }
+  }
+
+  &__author {
+    color: $text-primary;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__separator {
+    color: $text-muted;
+  }
+
+  &__center {
+    color: $text-muted;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 2. LIENZO PRINCIPAL Y CONTENEDOR (CANVAS & LAYOUT)
+// -----------------------------------------------------------------------------
+.kshield-canvas {
+  --background: #{$bg-canvas};
+  --color: #{$text-primary};
+  font-family: $font-sans;
+}
+
+.kshield-layout {
+  max-width: 980px;
+  margin-inline: auto;
+  padding: $spacing-md;
+
+  @include respond-to('md') {
+    padding: $spacing-xl $spacing-lg;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 3. BARRA DE CONTROL DEL INSPECTOR DE RÚBRICA
+// -----------------------------------------------------------------------------
+.inspector-control-bar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  margin-bottom: $spacing-lg;
+  background-color: rgba($bg-surface-elevated, 0.7);
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  backdrop-filter: blur(8px);
+
+  @include respond-to('sm') {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  &__tag {
+    @include rubric-badge($text-cyan, 0.18);
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $text-secondary;
+    letter-spacing: 0.05em;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+  }
+}
+
+// Pills interactivos del inspector
+.control-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-family: $font-mono;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $text-secondary;
+  background-color: $bg-surface;
+  border: 1px solid $border-medium;
+  border-radius: $radius-full;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: $radius-full;
+    background-color: $text-muted;
+    transition: background-color 0.2s ease;
+  }
+
+  &:hover {
+    background-color: $bg-surface-elevated;
+    border-color: $text-cyan;
+    color: $text-primary;
+  }
+
+  &--active {
+    background-color: rgba($color-btn-blue, 0.15);
+    border-color: rgba($color-btn-blue, 0.6);
+    color: #60a5fa;
+
+    .control-pill__dot {
+      background-color: #60a5fa;
+      box-shadow: 0 0 6px #60a5fa;
+    }
+  }
+
+  &--alt {
+    &.control-pill--active {
+      background-color: rgba($color-border-green, 0.15);
+      border-color: rgba($color-border-green, 0.6);
+      color: #34d399;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 4. CARTELAS DEL INSPECTOR DE RÚBRICA (VISUALIZADOR DOCENTE)
+// -----------------------------------------------------------------------------
+.rubric-callout {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  margin-bottom: $spacing-sm;
+  border-radius: $radius-sm;
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-left-width: 3px;
+  border-left-style: solid;
+  animation: fadeIn 0.25s ease-out;
+
+  @include respond-to('sm') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__pill {
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.05em;
+  }
+
+  &__rule {
+    color: $text-secondary;
+    font-weight: $font-weight-regular;
+  }
+
+  &--red {
+    border-left-color: $color-title-red;
+    background-color: rgba($color-title-red, 0.08);
+
+    .rubric-callout__pill {
+      color: $color-title-red;
+    }
+  }
+
+  &--green {
+    border-left-color: $color-border-green;
+    background-color: rgba($color-border-green, 0.08);
+
+    .rubric-callout__pill {
+      color: $color-border-green;
+    }
+  }
+
+  &--blue {
+    border-left-color: $color-btn-blue;
+    background-color: rgba($color-btn-blue, 0.08);
+
+    .rubric-callout__pill {
+      color: #60a5fa;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 5. TARJETA PRINCIPAL DE TELEMETRÍA (BLOQUE BEM: .telemetry-card)
+// -----------------------------------------------------------------------------
+.telemetry-card {
+  @include surface-panel($bg: $bg-surface, $border: $border-subtle, $radius: $radius-lg);
+  padding: $spacing-lg;
+  box-shadow: $shadow-lg;
+  transition: border-color 0.3s ease;
+
+  @include respond-to('md') {
+    padding: $spacing-xl;
+  }
+
+  // Barra de metadatos superior de la tarjeta
+  &__meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: $spacing-md;
+    margin-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-subtle;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $text-muted;
+  }
+
+  &__cluster-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  &__status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: $radius-full;
+    background-color: $color-border-green;
+  }
+
+  &__cluster-id {
+    color: $text-secondary;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__timestamp {
+    color: $text-muted;
+  }
+
+  // Zona de Encabezado
+  &__header-zone {
+    margin-bottom: $spacing-xl;
+  }
+
+  // ===========================================================================
+  // REQUISITO A: TÍTULO EN ROJO, MAYÚSCULAS Y CENTRADO
+  // ===========================================================================
+  // Cumplimiento estricto de las 3 condiciones exigidas en el enunciado:
+  // 1. Color: Rojo ($color-title-red: #ef4444 o fallback red)
+  // 2. Mayúsculas: text-transform: uppercase
+  // 3. Alineación: text-align: center
+  &__title--red-centered {
+    color: $color-title-red;             // Condición 1: Color Rojo
+    text-transform: uppercase;           // Condición 2: Mayúsculas obligatorias
+    text-align: center;                  // Condición 3: Alineación centrada
+
+    // Propiedades de refinamiento tipográfico (Anti-AI-Slop)
+    font-family: $font-mono;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.05em;
+    line-height: 1.25;
+    margin: 0 0 $spacing-sm 0;
+    text-shadow: 0 0 16px $color-title-red-glow;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+
+    @include respond-to('md') {
+      font-size: $font-size-3xl;
+      letter-spacing: 0.07em;
+    }
+
+    // Modificador para color CSS puro en Modo Inspector ('red' puro)
+    &.telemetry-card__title--pure-red {
+      color: $color-pure-red;
+      text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+    }
+  }
+
+  &__subtitle {
+    text-align: center;
+    max-width: 640px;
+    margin-inline: auto;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    line-height: 1.6;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    strong {
+      color: $text-primary;
+    }
+  }
+
+  // ===========================================================================
+  // REQUISITO C: IMAGEN CENTRADA CON BORDE VERDE DE 3PX
+  // ===========================================================================
+  &__media-zone {
+    margin-bottom: $spacing-xl;
+  }
+
+  &__media-wrapper {
+    width: 100%;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Aplicación del mixin 'center-block-image' con grosor 3px y color verde
+  &__image--green-border {
+    @include center-block-image(
+      $border-width: $border-width-target, // 3px exactos
+      $border-color: $color-border-green, // #10b981 (Verde esmeralda de telemetría)
+      $border-radius: $radius-md
+    );
+
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    background-color: $bg-canvas;
+
+    // Modificador para color CSS puro en Modo Inspector ('green' puro)
+    &.telemetry-card__image--pure-green {
+      border-color: $color-pure-green;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.45);
+    }
+  }
+
+  &__caption {
+    text-align: center;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $text-muted;
+    margin-top: $spacing-sm;
+  }
+
+  // ===========================================================================
+  // REQUISITO B: BOTÓN ALINEADO A LA DERECHA EN COLOR AZUL
+  // ===========================================================================
+  &__actions-zone {
+    margin-bottom: $spacing-xl;
+  }
+
+  // Contenedor alineado estrictamente a la derecha mediante mixin Flexbox
+  &__actions--right {
+    @include flex-end-right($wrap: true, $gap: $spacing-md);
+    width: 100%;
+    padding-top: $spacing-sm;
+  }
+
+  &__status-feedback {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    color: $text-muted;
+  }
+
+  &__pulse-icon {
+    color: $color-border-green;
+    animation: telemetry-pulse 1.5s infinite;
+  }
+
+  &__status-text {
+    letter-spacing: 0.03em;
+  }
+
+  // Estilizado del Web Component <ion-button> de Ionic en color AZUL
+  // Aplicamos la variable CSS nativa de Ionic (--background) y penetramos
+  // el Shadow DOM con ::part(native) para control absoluto.
+  &__btn--blue {
+    // Variable CSS canónica de Ionic para alterar el color de fondo
+    --background: #{$color-btn-blue};
+    --background-hover: #{$color-btn-blue-hover};
+    --background-activated: #{$color-btn-blue-hover};
+    --background-focused: #{$color-btn-blue-focus};
+    --color: #ffffff;
+    --border-radius: #{$radius-sm};
+    --box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --padding-start: 18px;
+    --padding-end: 18px;
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.05em;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                --box-shadow 0.2s ease;
+
+    // Penetración del Shadow DOM de Ionic mediante CSS Shadow Parts
+    &::part(native) {
+      font-weight: $font-weight-semibold;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: $radius-sm;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      --box-shadow: 0 0 20px rgba(37, 99, 235, 0.55);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    // Modificador para color CSS puro en Modo Inspector ('blue' puro)
+    &.telemetry-card__btn--pure-blue {
+      --background: #{$color-pure-blue};
+      --background-hover: darkblue;
+      --box-shadow: 0 0 20px rgba(0, 0, 255, 0.6);
+
+      &::part(native) {
+        background-color: $color-pure-blue;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 6. PANEL INFERIOR DE TELEMETRÍA (FOOTER GRID)
+  // ---------------------------------------------------------------------------
+  &__footer {
+    padding-top: $spacing-lg;
+    border-top: 1px solid $border-subtle;
+  }
+}
+
+// Contenido interno del botón
+.btn-inner-content {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  &__label {
+    text-transform: uppercase;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+}
+
+.telemetry-card__btn--blue:hover .btn-inner-content__icon {
+  transform: translateX(2px);
+}
+
+// Retícula de tarjetas técnicas inferiores
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to('lg') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.telemetry-item {
+  background-color: rgba($bg-canvas, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &__title {
+    font-family: $font-mono;
+    font-size: 0.68rem;
+    font-weight: $font-weight-bold;
+    color: $text-muted;
+    letter-spacing: 0.06em;
+  }
+
+  &__value {
+    font-family: $font-mono;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $text-cyan;
+  }
+
+  &__desc {
+    font-size: 0.72rem;
+    color: $text-secondary;
+    line-height: 1.4;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 7. KEYFRAME ANIMATIONS
+// -----------------------------------------------------------------------------
+@keyframes telemetry-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

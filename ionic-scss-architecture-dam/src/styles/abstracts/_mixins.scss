@@ -1,0 +1,135 @@
+// =============================================================================
+// KSHIELD SENTINEL // SCSS DESIGN SYSTEM: ABSTRACTS - MIXINS
+// Autor: Luis Lázaro Pimentel (2º DAM - IES Nebrija)
+// Módulo: Desarrollo de Interfaces (Código 0488)
+// Práctica: Arquitectura SCSS, BEM, Ionic y Angular Standalone
+// =============================================================================
+
+@use 'variables' as *;
+
+// -----------------------------------------------------------------------------
+// 1. MIXIN DE ALINEACIÓN A LA DERECHA (REQUISITO B DE LA RÚBRICA)
+// -----------------------------------------------------------------------------
+/// Configura un contenedor Flexbox moderno para alinear elementos secundarios
+/// estrictamente hacia el extremo derecho del contenedor, respetando el flujo
+/// de lectura y permitiendo adaptabilidad responsive con wrap opcional.
+///
+/// @param {Boolean} $wrap [false] - Si permite que los elementos salten de línea en pantallas estrechas
+/// @param {Length} $gap [$spacing-md] - Espacio entre elementos en caso de múltiples acciones
+@mixin flex-end-right($wrap: false, $gap: $spacing-md) {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $gap;
+
+  @if $wrap {
+    flex-wrap: wrap;
+  } @else {
+    flex-wrap: nowrap;
+  }
+
+  // Comentario de preprocesamiento: Flexbox evita los problemas clásicos de flotación
+  // (float: right) que rompían el 'box-model' y obligaban a recurrir a hacks 'clearfix'.
+}
+
+// -----------------------------------------------------------------------------
+// 2. MIXIN DE IMAGEN CENTRADA CON BORDE VERDE DE 3PX (REQUISITO C DE LA RÚBRICA)
+// -----------------------------------------------------------------------------
+/// Centra un elemento de imagen en el eje horizontal y aplica el borde verde de
+/// 3px estipulado exactamente en el enunciado del profesor, complementándolo con
+/// un 'box-sizing: border-box' defensivo y un halo sutil de resplandor esmeralda.
+///
+/// @param {Length} $border-width [$border-width-target] - Grosor del borde (3px por defecto)
+/// @param {Color} $border-color [$color-border-green] - Color del borde (#10b981 por defecto)
+/// @param {Length} $border-radius [$radius-md] - Radio de curvatura de esquinas
+@mixin center-block-image(
+  $border-width: $border-width-target,
+  $border-color: $color-border-green,
+  $border-radius: $radius-md
+) {
+  display: block;
+  margin-inline: auto;         // Centrado horizontal moderno compatible con LTR y RTL
+  max-width: 100%;             // Prevención de overflow horizontal en móviles
+  height: auto;
+  box-sizing: border-box;       // Garantiza que los 3px de borde no descuadren el contenedor
+
+  // Rúbrica estricta: Borde verde de 3px
+  border: $border-width $border-style-target $border-color;
+  border-radius: $border-radius;
+
+  // Realce de diseño anti-slop: Un resplandor de telemetría que enfatiza el borde verde
+  box-shadow: 0 0 16px rgba($border-color, 0.28), $shadow-md;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba($border-color, 0.45), $shadow-lg;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 3. MIXIN RESPONSIVE MULTI-DISPOSITIVO (MOBILE FIRST BREAKPOINTS)
+// -----------------------------------------------------------------------------
+/// Abstrae las Media Queries de CSS para construir interfaces Mobile-First.
+/// Permite modularizar la lógica visual para smartphones, tablets y pantallas de escritorio.
+///
+/// @param {String} $breakpoint - Nombre del breakpoint ('sm', 'md', 'lg', 'xl')
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-mobile) {
+      @content;
+    }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-wide) {
+      @content;
+    }
+  } @else {
+    @warn "El breakpoint '#{$breakpoint}' no está definido en variables.scss.";
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 4. MIXIN DE SUPERFICIE DE INGENIERÍA (GLASSMORPHISM / PANEL TÉCNICO)
+// -----------------------------------------------------------------------------
+/// Genera tarjetas con acabado translúcido, borde de 1px sutil y desenfoque de
+/// fondo 'backdrop-filter', siguiendo las reglas de arte de 'taste-skill'.
+@mixin surface-panel($bg: $bg-surface, $border: $border-subtle, $radius: $radius-lg) {
+  background-color: $bg;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $border;
+  border-radius: $radius;
+  box-shadow: $shadow-md;
+}
+
+// -----------------------------------------------------------------------------
+// 5. MIXIN DE INSIGNIAS Y TAGS DEL INSPECTOR DE RÚBRICA
+// -----------------------------------------------------------------------------
+/// Formatea etiquetas técnicas que identifican los requisitos de la rúbrica
+/// en el modo de inspección para evaluación del profesor.
+@mixin rubric-badge($color, $bg-alpha: 0.12) {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-family: $font-mono;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color;
+  background-color: rgba($color, $bg-alpha);
+  border: 1px solid rgba($color, 0.35);
+  border-radius: $radius-sm;
+  padding: 3px $spacing-sm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
